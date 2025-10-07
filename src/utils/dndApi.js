@@ -1,22 +1,36 @@
-const BASE_URL = "https://www.dnd5eapi.co/api/2014/ability-scores/cha";
+import axios from 'axios';
 
-export async function getModifier() {
-  const res = await fetch(BASE_URL);
-  if (!res.ok) throw new Error('Failed to fetch modifier');
-  return res.json();
+const BASE_URL = "https://www.dnd5eapi.co/api/2014";
+
+async function fetch(ENDPOINT) {
+  return await axios.get(BASE_URL + ENDPOINT, {
+    headers: {
+      Accept: 'application/json'
+    }
+  })
 }
 
+export async function getClassDataByIndex(className) {
+  const res = await fetch(`/classes/${className}`)
 
+  if (res.statusText != 'OK') throw new Error('Failed to fetch class data by index');
+
+  return res.data
+}
+
+export async function getClassResourcesByLevel(className, level) {
+  const res = await fetch(`/classes/${className}/levels/${level}`)
+
+  if (res.statusText != 'OK') throw new Error('Failed to fetch class resources by level');
+
+  return res.data
+}
 
 /*
+******* TODO *******
+
 
 JOGADOR
-
-- dados da classe por nome (https://5e-bits.github.io/docs/api/get-a-class-by-index)
-
-- dados da subclasse por nome (https://5e-bits.github.io/docs/api/get-a-subclass-by-index)
-
-- recursos da classe por nivel (https://5e-bits.github.io/docs/api/get-level-resource-for-a-class-and-level)
 
 - dados da raca por nome (https://5e-bits.github.io/docs/api/get-a-race-by-index)
 
